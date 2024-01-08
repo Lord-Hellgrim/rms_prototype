@@ -2,4 +2,5 @@
 
 mod app;
 mod components;
+mod utilities;
 pub use app::App;
