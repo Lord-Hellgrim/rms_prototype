@@ -21,7 +21,7 @@ log = "0.4"
 serde = { version = "1", features = ["derive"] }
 smartstring = "1.0.1"
 poll-promise = "0.3.0"
-EZDB = "0.1.1"
+EZDB = "0.1.13"
 
 # native:
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]

@@ -65,7 +65,9 @@ impl Default for LoginScreen {
 
 #[derive(Default)]
 pub struct AdminScreen {
-    pub text: String,
+    pub table_text: String,
+    pub table_title: String,
+    pub table_confirmation: String,
     pub promise: Option<poll_promise::Promise<String>>,
 }
 
@@ -90,7 +92,7 @@ impl Default for App {
         Self {
             // Example stuff:
             label: "Hello World!".to_owned(),
-            screen: Screen::Sales,
+            screen: Screen::Admin,
             value: 2.7,
             lines: Vec::new(),
             login_screen: LoginScreen::default(),
@@ -207,29 +209,83 @@ pub fn show_admin_screen(app: &mut App, ctx: &egui::Context) {
 
         if let Some(promise) = &app.admin_screen.promise {
             if let Some(text) = promise.ready() {
-                app.admin_screen.text = text.clone();
+                app.admin_screen.table_confirmation = text.clone();
             }
         }
 
         ui.heading("ADMINISTRATION");
         
-        ui.horizontal(|ui| {
-            let t = app.admin_screen.text.clone();
-            ui.label(t.to_string());
-            ui.text_edit_singleline(&mut app.label);
+        ui.vertical(|ui| {
+            ui.horizontal(|ui| {
+                ui.label("add table to database");
+                ui.label(&app.admin_screen.table_confirmation);
+            });
+
+            ui.horizontal(|ui| {
+
+                if ui.button("upload table").clicked() {
+                    let ctx_clone = ctx.clone();
+                let table_title = app.admin_screen.table_title.clone();
+                println!("{}\n\n{}", app.admin_screen.table_text, app.admin_screen.table_text.len());
+                let table_text = app.admin_screen.table_text.clone();
+                let promise = Promise::spawn_thread("upload table", move || {
+                    let confirmation = EZDB::client_networking::upload_table(
+                        "127.0.0.1:3004",
+                        "admin",
+                        "admin",
+                        &table_title,
+                        &table_text
+                    );
+                    ctx_clone.request_repaint();
+                    match confirmation {
+                        Ok(ok) => format!("Upload successful: {}", ok),
+                        Err(e) => format!("Upload failed because: {}", e),
+                    }
+                });
+                app.admin_screen.promise = Some(promise);
+
+                
+                }
+
+                if ui.button("update table").clicked() {
+                    let ctx_clone = ctx.clone();
+                let table_title = app.admin_screen.table_title.clone();
+                println!("{}\n\n{}", app.admin_screen.table_text, app.admin_screen.table_text.len());
+                let table_text = app.admin_screen.table_text.clone();
+                let promise = Promise::spawn_thread("upload table", move || {
+                    let confirmation = EZDB::client_networking::update_table(
+                        "127.0.0.1:3004",
+                        "admin",
+                        "admin",
+                        &table_title,
+                        &table_text
+                    );
+                    ctx_clone.request_repaint();
+                    match confirmation {
+                        Ok(ok) => format!("Upload successful: {}", ok),
+                        Err(e) => format!("Upload failed because: {}", e),
+                    }
+                });
+                app.admin_screen.promise = Some(promise);
+
+                
+                }
+
+
+            });
+
+            if let Some(promise) = &app.admin_screen.promise {
+                if let Some(text) = promise.ready() {
+                    app.admin_screen.table_confirmation = text.clone();
+                }
+            }
+            ui.text_edit_singleline(&mut app.admin_screen.table_title);
+            ui.text_edit_multiline(&mut app.admin_screen.table_text);
         });
         
-        ui.add(egui::Slider::new(&mut app.value, 0.0..=10.0).text("value"));
-        if ui.button("Increment").clicked() {
-            app.value += 1.0;
-        }
 
         ui.separator();
         
-        ui.with_layout(egui::Layout::bottom_up(egui::Align::LEFT), |ui| {
-            powered_by_egui_and_eframe(ui);
-            egui::warn_if_debug_build(ui);
-        });
     });
 }
 
