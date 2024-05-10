@@ -3,7 +3,6 @@ use std::fmt::Display;
 
 use egui::RichText;
 use poll_promise::Promise;
-use EZDB;
 
 use crate::{components::{self, default_top_bar}, utilities::lines_to_csv};
 

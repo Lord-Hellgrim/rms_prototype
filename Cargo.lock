@@ -1261,7 +1261,6 @@ dependencies = [
  "env_logger",
  "log",
  "poll-promise",
- "serde",
  "smartstring",
  "wasm-bindgen-futures",
 ]

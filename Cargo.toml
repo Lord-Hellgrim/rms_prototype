@@ -18,7 +18,7 @@ eframe = { version = "0.26", default-features = false, features = [
 log = "0.4"
 
 # You only need serde if you want app persistence:
-serde = { version = "1", features = ["derive"] }
+# serde = { version = "1", features = ["derive"] }
 smartstring = "1.0.1"
 poll-promise = "0.3.0"
 
