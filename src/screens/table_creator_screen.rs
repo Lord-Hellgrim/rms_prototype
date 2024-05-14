@@ -37,8 +37,35 @@ pub fn show_table_creator_screen(app: &mut App, ctx: &egui::Context) {
                 app.table_creator_screen.lines.push(temp);
             }
             if ui.button("print lines").clicked() {
-                println!("{}", lines_to_ezcsv(&app.table_creator_screen.lines));
+                let mut ezcsv = app.table_creator_screen.header.clone();
+                ezcsv.push_str(&lines_to_ezcsv(&app.table_creator_screen.lines));
+                println!("{}", ezcsv);
             }
+
+            if ui.button("send table").clicked() {
+                let ctx_clone = ctx.clone();
+                let mut ezcsv = app.table_creator_screen.header.clone();
+                ezcsv.push('\n');
+                ezcsv.push_str(&lines_to_ezcsv(&app.table_creator_screen.lines));
+                let table_name = app.table_creator_screen.table_name.clone();
+                let promise = Promise::spawn_thread("send table", move || {
+                    let answer = EZDB::client_networking::upload_table("127.0.0.1:3004", "admin", "admin", &table_name, &ezcsv);
+                    std::thread::sleep(std::time::Duration::from_secs(3));
+                    ctx_clone.request_repaint(); // wake up UI thread
+                    match answer {
+                        Ok(csv) => csv,
+                        Err(e) => format!("Could not retreive data because: {e}"),
+                    }
+                });
+                app.admin_screen.promise = Some(promise);
+            };
+            if let Some(promise) = &app.admin_screen.promise {
+                match promise.ready() {
+                    Some(s) => ui.label(s),
+                    None => ui.spinner(),
+                };
+            };
+
         });
         let mut remover: Option<usize> = None;
         for (index, line) in &mut app.table_creator_screen.lines.iter_mut().enumerate() {

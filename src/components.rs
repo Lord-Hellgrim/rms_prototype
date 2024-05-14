@@ -1,8 +1,5 @@
 use crate::app::*;
 
-
-
-
 #[inline]
 pub fn default_top_bar(ctx: &egui::Context, app: &mut App) {
     egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
