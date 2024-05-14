@@ -1,3 +1,5 @@
+use poll_promise::Promise;
+
 use crate::app;
 
 
@@ -57,4 +59,23 @@ pub fn lines_to_csv(lines: &[app::Product], skiplist: &[u8]) -> String {
     printer.pop();
 
     printer
+}
+
+
+pub fn lines_to_ezcsv(lines: &Vec<Vec<String>>) -> String {
+
+    let mut ezcsv = String::new();
+
+    for line in lines {
+        for cell in line {
+            ezcsv.push_str(cell);
+            ezcsv.push_str(";");
+        }
+        ezcsv.pop();
+        ezcsv.push('\n');
+    }
+    ezcsv.pop();
+
+    ezcsv
+
 }

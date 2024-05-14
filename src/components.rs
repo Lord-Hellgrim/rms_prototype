@@ -37,6 +37,10 @@ pub fn default_top_bar(ctx: &egui::Context, app: &mut App) {
                         ui.close_menu();
                         
                     }
+                    if ui.button("Table Creator").clicked() {
+                        app.screen = Screen::TableCreator;
+                        ui.close_menu();
+                    }
                     if ui.button("Quit").clicked() {
                         ctx.send_viewport_cmd(egui::ViewportCommand::Close);
                     }

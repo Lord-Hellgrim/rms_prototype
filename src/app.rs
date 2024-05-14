@@ -4,7 +4,7 @@ use std::fmt::Display;
 use egui::RichText;
 use poll_promise::Promise;
 
-use crate::{components::{self, default_top_bar}, utilities::lines_to_csv};
+use crate::{components::{self, default_top_bar}, utilities::lines_to_csv, EZTable_creator::{show_table_creator_screen, TableCreatorScreen}};
 
 
 #[derive(Debug)]
@@ -14,6 +14,7 @@ pub enum Screen {
     Purchase,
     Sales,
     Transfer,
+    TableCreator,
 }
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -67,7 +68,7 @@ pub struct AdminScreen {
     pub table_text: String,
     pub table_title: String,
     pub table_confirmation: String,
-    pub promise: Option<poll_promise::Promise<String>>,
+    pub promise: Option<Promise<String>>,
 }
 
 #[derive(Default)]
@@ -84,6 +85,7 @@ pub struct App {
     pub login_screen: LoginScreen,
     pub admin_screen: AdminScreen,
     pub sales_screen: SalesScreen,
+    pub table_creator_screen: TableCreatorScreen,
 }
 
 impl Default for App {
@@ -97,7 +99,7 @@ impl Default for App {
             login_screen: LoginScreen::default(),
             admin_screen: AdminScreen::default(),
             sales_screen: SalesScreen::default(),
-
+            table_creator_screen: TableCreatorScreen::default(),
         }
     }
 }
@@ -138,6 +140,7 @@ impl eframe::App for App {
             Screen::Purchase => show_default_screen(self, ctx),
             Screen::Transfer => show_default_screen(self, ctx),
             Screen::Sales => show_sales_screen(self, ctx),
+            Screen::TableCreator => show_table_creator_screen(self, ctx)
         };
 
     }
@@ -278,7 +281,9 @@ pub fn show_admin_screen(app: &mut App, ctx: &egui::Context) {
                     app.admin_screen.table_confirmation = text.clone();
                 }
             }
+            ui.label("Table name");
             ui.text_edit_singleline(&mut app.admin_screen.table_title);
+            ui.label("EZCSV formatted string");
             ui.text_edit_multiline(&mut app.admin_screen.table_text);
         });
         
