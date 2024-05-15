@@ -1,10 +1,27 @@
 use egui::RichText;
 use poll_promise::Promise;
 
-use crate::{app::{LoginScreen, Screen}, components, App};
+use crate::{app::Screen, components, App};
 
 
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
+pub struct LoginScreen {
+    pub username: String,
+    pub password: String,
+    pub error: String,
+    pub username_focus: bool,
+}
 
+impl Default for LoginScreen {
+    fn default() -> Self {
+        LoginScreen {
+            username: "".to_owned(),
+            password: "".to_owned(),
+            error: "".to_owned(),
+            username_focus: true,
+        }
+    }
+}
 
 pub fn show_login_screen(app: &mut App, ctx: &egui::Context) {
     // components::default_top_bar(ctx, app);

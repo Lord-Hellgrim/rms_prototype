@@ -9,7 +9,11 @@ use crate::utilities::*;
 
 use crate::screens::*;
 use self::admin_screen::show_admin_screen;
+use self::admin_screen::AdminScreen;
 use self::login_screen::show_login_screen;
+use self::login_screen::LoginScreen;
+use self::query_sender_screen::show_query_creator_screen;
+use self::query_sender_screen::QuerySenderScreen;
 use self::sales_screen::show_sales_screen;
 use self::table_creator_screen::show_table_creator_screen;
 use self::table_creator_screen::TableCreatorScreen;
@@ -22,6 +26,7 @@ pub enum Screen {
     Sales,
     Transfer,
     TableCreator,
+    QuerySender,
 }
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -51,33 +56,6 @@ impl Display for Product {
     }
 }
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub struct LoginScreen {
-    pub username: String,
-    pub password: String,
-    pub error: String,
-    pub username_focus: bool,
-}
-
-impl Default for LoginScreen {
-    fn default() -> Self {
-        LoginScreen {
-            username: "".to_owned(),
-            password: "".to_owned(),
-            error: "".to_owned(),
-            username_focus: true,
-        }
-    }
-}
-
-#[derive(Default)]
-pub struct AdminScreen {
-    pub table_text: String,
-    pub table_title: String,
-    pub table_confirmation: String,
-    pub promise: Option<Promise<String>>,
-}
-
 #[derive(Default)]
 pub struct SalesScreen {
     pub skiplist: [u8;5],
@@ -93,6 +71,7 @@ pub struct App {
     pub admin_screen: AdminScreen,
     pub sales_screen: SalesScreen,
     pub table_creator_screen: TableCreatorScreen,
+    pub query_sender_screen: QuerySenderScreen,
 }
 
 impl Default for App {
@@ -107,6 +86,7 @@ impl Default for App {
             admin_screen: AdminScreen::default(),
             sales_screen: SalesScreen::default(),
             table_creator_screen: TableCreatorScreen::default(),
+            query_sender_screen: QuerySenderScreen::default(),
         }
     }
 }
@@ -147,28 +127,12 @@ impl eframe::App for App {
             Screen::Purchase => show_default_screen(self, ctx),
             Screen::Transfer => show_default_screen(self, ctx),
             Screen::Sales => show_sales_screen(self, ctx),
-            Screen::TableCreator => show_table_creator_screen(self, ctx)
+            Screen::TableCreator => show_table_creator_screen(self, ctx),
+            Screen::QuerySender => show_query_creator_screen(self, ctx),
         };
 
     }
 }
-
-// ################# LOGIN SCREEN #############################################################################
-
-
-// ########################### END OF LOGIN SCREEN ##################################################
-
-
-// ########################### ADMIN SCREEN #########################################################
-
-
-
-// ###################### END OF ADMIN SCREEN ##############################################################
-
-// ####################### SALES SCREEN ####################################################################
-
-
-// ####################### END OF SALES SCREEN #############################################################
 
 pub fn show_default_screen(mut app: &mut App, ctx: &egui::Context) {
     components::default_top_bar(ctx, &mut app);
@@ -176,6 +140,7 @@ pub fn show_default_screen(mut app: &mut App, ctx: &egui::Context) {
     components::default_central_panel(app, ctx);
     
 }
+
 pub fn powered_by_egui_and_eframe(ui: &mut egui::Ui) {
     ui.horizontal(|ui| {
         ui.spacing_mut().item_spacing.x = 0.0;

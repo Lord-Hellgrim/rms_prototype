@@ -3,7 +3,13 @@ use poll_promise::Promise;
 use crate::{components, App};
 
 
-
+#[derive(Default)]
+pub struct AdminScreen {
+    pub table_text: String,
+    pub table_title: String,
+    pub table_confirmation: String,
+    pub promise: Option<Promise<String>>,
+}
 
 pub fn show_admin_screen(app: &mut App, ctx: &egui::Context) {
     components::default_top_bar(ctx, app);

@@ -3,12 +3,23 @@ use EZDB::db_structure::KeyString;
 
 use crate::{components, utilities::lines_to_ezcsv, App};
 
-#[derive(Default)]
+
 pub struct TableCreatorScreen {
     table_name: String,
     header: String,
     lines: Vec<Vec<String>>,
     promise: Option<Promise<String>>,
+}
+
+impl Default for TableCreatorScreen {
+    fn default() -> TableCreatorScreen {
+        TableCreatorScreen {
+            table_name: "test".to_owned(),
+            header: "key,i-P;data,i-N;other,i-N".to_owned(),
+            lines: Vec::new(),
+            promise: None,
+        }
+    }
 }
 
 
