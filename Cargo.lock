@@ -5,7 +5,7 @@ version = 3
 [[package]]
 name = "EZDB"
 version = "0.1.15"
-source = "git+https://github.com/lord-hellgrim/EZDB.git?branch=master#4461f5fd7521c7254989d78e88aa3a09f0ee063e"
+source = "git+https://github.com/lord-hellgrim/EZDB.git?branch=master#dc7b9e2d1827da7e8dbc2394d8d2b7760bc41bc1"
 dependencies = [
  "aes-gcm",
  "blake3",
@@ -1823,9 +1823,9 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "toml_datetime"
-version = "0.6.5"
+version = "0.6.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3550f4e9685620ac18a50ed434eb3aec30db8ba93b0287467bca5826ea25baf1"
+checksum = "4badfd56924ae69bcc9039335b2e017639ce3f9b001c393c1b2d1ef846ce2cbf"
 
 [[package]]
 name = "toml_edit"
