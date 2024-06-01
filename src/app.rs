@@ -1,12 +1,9 @@
 
 use std::fmt::Display;
 
-use egui::RichText;
-use poll_promise::Promise;
 use sales_screen::SalesScreen;
 
 use crate::components;
-use crate::utilities::*;
 
 use crate::screens::*;
 use self::admin_screen::show_admin_screen;

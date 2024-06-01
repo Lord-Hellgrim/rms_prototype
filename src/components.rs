@@ -56,7 +56,7 @@ pub fn default_top_bar(ctx: &egui::Context, app: &mut App) {
                         Screen::Sales => ui.label("To remove a line, double click the 'remove line' button of the line you want to remove"),
                         Screen::Transfer => todo!(),
                         Screen::TableCreator => todo!(),
-                        Screen::QuerySender => todo!(),
+                        Screen::QuerySender => ui.label("Queries typed here will be sent via the EZDB query_table() function"),
                     }
                 });
                 ui.add_space(16.0);

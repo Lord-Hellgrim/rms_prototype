@@ -2,9 +2,17 @@ use poll_promise::Promise;
 
 use crate::{app::Product, components::{self, list_of_lines}, utilities::lines_to_csv, App};
 
-#[derive(Default)]
+
 pub struct SalesScreen {
     lines: Vec<Vec<String>>,
+}
+
+impl Default for SalesScreen {
+    fn default() -> Self {
+        SalesScreen {
+            lines: vec![vec!["first".to_owned(), "default".to_owned(), "line".to_owned(),]]
+        }
+    }
 }
 
 
