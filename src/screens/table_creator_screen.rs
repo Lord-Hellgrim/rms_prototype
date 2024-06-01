@@ -1,7 +1,7 @@
 use poll_promise::Promise;
 use EZDB::db_structure::KeyString;
 
-use crate::{components, utilities::lines_to_ezcsv, App};
+use crate::{components, utilities::lines_to_ezcsv, App, screens::query_sender_screen};
 
 
 pub struct TableCreatorScreen {
@@ -50,7 +50,6 @@ pub fn show_table_creator_screen(app: &mut App, ctx: &egui::Context) {
             if ui.button("print lines").clicked() {
                 let mut ezcsv = app.table_creator_screen.header.clone();
                 ezcsv.push_str(&lines_to_ezcsv(&app.table_creator_screen.lines));
-                println!("{}", ezcsv);
             }
 
             if ui.button("send table").clicked() {

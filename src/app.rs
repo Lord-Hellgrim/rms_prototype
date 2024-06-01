@@ -3,6 +3,7 @@ use std::fmt::Display;
 
 use egui::RichText;
 use poll_promise::Promise;
+use sales_screen::SalesScreen;
 
 use crate::components;
 use crate::utilities::*;
@@ -56,17 +57,13 @@ impl Display for Product {
     }
 }
 
-#[derive(Default)]
-pub struct SalesScreen {
-    pub skiplist: [u8;5],
-}
+
 
 // ##################### THIS IS THE STATE OF THE APPLICATION ###################################################
 pub struct App {
     pub label: String,
-    pub screen: Screen,
+    pub current_screen: Screen,
     pub value: f32,
-    pub lines: Vec<Product>,
     pub login_screen: LoginScreen,
     pub admin_screen: AdminScreen,
     pub sales_screen: SalesScreen,
@@ -79,9 +76,8 @@ impl Default for App {
         Self {
             // Example stuff:
             label: "Hello World!".to_owned(),
-            screen: Screen::Admin,
+            current_screen: Screen::Sales,
             value: 2.7,
-            lines: Vec::new(),
             login_screen: LoginScreen::default(),
             admin_screen: AdminScreen::default(),
             sales_screen: SalesScreen::default(),
@@ -95,9 +91,10 @@ impl Default for App {
 
 impl App {
     /// Called once before the first frame.
-    pub fn new(_cc: &eframe::CreationContext<'_>) -> Self {
+    pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
         // This is also where you can customize the look and feel of egui using
         // `cc.egui_ctx.set_visuals` and `cc.egui_ctx.set_fonts`.
+
 
         // Load previous app state (if any).
         // Note that you must enable the `persistence` feature for this to work.
@@ -121,7 +118,7 @@ impl eframe::App for App {
         // For inspiration and more examples, go to https://emilk.github.io/egui
 
 
-        match self.screen {
+        match self.current_screen {
             Screen::Admin => show_admin_screen(self, ctx),
             Screen::Login => show_login_screen(self, ctx),
             Screen::Purchase => show_default_screen(self, ctx),

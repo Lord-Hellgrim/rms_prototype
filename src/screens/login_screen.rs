@@ -40,7 +40,7 @@ pub fn show_login_screen(app: &mut App, ctx: &egui::Context) {
             if ui.button("Login").clicked() {
                 if app.login_screen.password == "admin" && app.login_screen.username == "admin" {
                     app.login_screen = LoginScreen::default();
-                    app.screen = Screen::Admin;
+                    app.current_screen = Screen::Admin;
                 } else {
                     app.login_screen.error = "Wrong username or password".to_owned();
                 }           
@@ -53,7 +53,7 @@ pub fn show_login_screen(app: &mut App, ctx: &egui::Context) {
     if ctx.input(|i| i.key_pressed(egui::Key::Enter)) {
         if app.login_screen.password == "admin" && app.login_screen.username == "admin" {
             app.login_screen = LoginScreen::default();
-            app.screen = Screen::Admin;
+            app.current_screen = Screen::Admin;
         } else {
             app.login_screen.error = "Wrong username or password".to_owned();
         } 

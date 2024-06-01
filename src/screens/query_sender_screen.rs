@@ -12,8 +12,6 @@ pub struct QuerySenderScreen {
 }
 
 
-
-
 pub fn show_query_creator_screen(app: &mut App, ctx: &egui::Context) {
     components::default_top_bar(ctx, app);
 
