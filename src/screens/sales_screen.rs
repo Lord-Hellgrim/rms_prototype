@@ -25,4 +25,5 @@ pub fn show_sales_screen(app: &mut App, ctx: &egui::Context) {
 
         list_of_lines(ui, &mut app.sales_screen.lines, vec!["default".to_owned(), "line".to_owned(), "entry".to_owned(),]);
     });
+
 }
