@@ -67,9 +67,9 @@ pub fn show_table_creator_screen(app: &mut App, ctx: &egui::Context) {
                         Err(e) => format!("Could not retreive data because: {e}"),
                     }
                 });
-                app.admin_screen.promise = Some(promise);
+                app.table_creator_screen.promise = Some(promise);
             };
-            if let Some(promise) = &app.admin_screen.promise {
+            if let Some(promise) = &app.table_creator_screen.promise {
                 match promise.ready() {
                     Some(s) => ui.label(s),
                     None => ui.spinner(),

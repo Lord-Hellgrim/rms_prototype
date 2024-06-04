@@ -1,13 +1,13 @@
 use egui::RichText;
 use poll_promise::Promise;
 
-use crate::{app::Screen, components, App};
+use crate::{app::Screen, components, utilities::String64, App};
 
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct LoginScreen {
-    pub username: String,
-    pub password: String,
+    pub username: String64,
+    pub password: String64,
     pub error: String,
     pub username_focus: bool,
 }
@@ -15,8 +15,8 @@ pub struct LoginScreen {
 impl Default for LoginScreen {
     fn default() -> Self {
         LoginScreen {
-            username: "".to_owned(),
-            password: "".to_owned(),
+            username: String64::new(),
+            password: String64::new(),
             error: "".to_owned(),
             username_focus: true,
         }
@@ -38,7 +38,7 @@ pub fn show_login_screen(app: &mut App, ctx: &egui::Context) {
             ui.label("Password");
             ui.text_edit_singleline(&mut app.login_screen.password);
             if ui.button("Login").clicked() {
-                if app.login_screen.password == "admin" && app.login_screen.username == "admin" {
+                if app.login_screen.password == "admin".into() && app.login_screen.username == "admin".into() {
                     app.login_screen = LoginScreen::default();
                     app.current_screen = Screen::Admin;
                 } else {
@@ -51,7 +51,7 @@ pub fn show_login_screen(app: &mut App, ctx: &egui::Context) {
     });
 
     if ctx.input(|i| i.key_pressed(egui::Key::Enter)) {
-        if app.login_screen.password == "admin" && app.login_screen.username == "admin" {
+        if app.login_screen.password == "admin".into() && app.login_screen.username == "admin".into() {
             app.login_screen = LoginScreen::default();
             app.current_screen = Screen::Admin;
         } else {

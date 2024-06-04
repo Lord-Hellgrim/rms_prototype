@@ -1,6 +1,6 @@
 use std::ops::Range;
 
-use egui::{text_selection::text_cursor_state::byte_index_from_char_index, Key, Ui};
+use egui::{text_selection::text_cursor_state::byte_index_from_char_index, Key, TextBuffer, Ui};
 
 use EZDB::db_structure::KeyString;
 
@@ -121,54 +121,4 @@ pub fn list_of_lines(ui: &mut Ui, lines_ref: &mut Vec<Vec<String>>, default_line
             lines_ref.remove(index);
         }
     });
-}
-
-
-impl egui::TextBuffer for KeyString {
-    fn is_mutable(&self) -> bool {
-        true
-    }
-
-    fn as_str(&self) -> &str {
-        self.as_str()
-    }
-
-    fn insert_text(&mut self, text: &str, char_index: usize) -> usize {
-        // Get the byte index from the character index
-        let byte_idx = byte_index_from_char_index(self.as_str(), char_index);
-
-        if byte_idx > 63 {
-            return 64
-        }
-
-        // Then insert the string
-        let mut temp = self.to_string();
-        temp.insert_str(byte_idx, text);
-        *self = KeyString::from(temp.as_str());
-
-        text.chars().count()
-    }
-
-    fn delete_char_range(&mut self, char_range: Range<usize>) {
-        assert!(char_range.start <= char_range.end);
-
-        // Get both byte indices
-        let byte_start = byte_index_from_char_index(self.as_str(), char_range.start);
-        let byte_end = byte_index_from_char_index(self.as_str(), char_range.end);
-
-        // Then drain all characters within this range
-        self.drain(byte_start..byte_end);
-    }
-
-    fn clear(&mut self) {
-        self.clear();
-    }
-
-    fn replace_with(&mut self, text: &str) {
-        *self = text.to_owned();
-    }
-
-    fn take(&mut self) -> String {
-        std::mem::take(self)
-    }
 }

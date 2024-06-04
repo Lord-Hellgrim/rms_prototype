@@ -132,8 +132,6 @@ pub fn show_default_screen(mut app: &mut App, ctx: &egui::Context) {
     components::default_top_bar(ctx, &mut app);
     
     components::default_central_panel(app, ctx);
-
-    components::default_side_panel(app, ctx);
     
 }
 
