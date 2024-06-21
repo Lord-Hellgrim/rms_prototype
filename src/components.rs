@@ -1,6 +1,6 @@
 use std::ops::Range;
 
-use egui::{text_selection::text_cursor_state::byte_index_from_char_index, Key, TextBuffer, Ui};
+use egui::{text_selection::text_cursor_state::byte_index_from_char_index, FontId, Key, RichText, TextBuffer, TextStyle, Ui};
 
 use EZDB::db_structure::KeyString;
 
@@ -48,19 +48,25 @@ pub fn default_top_bar(ctx: &egui::Context, app: &mut App) {
                         app.current_screen = Screen::QuerySender;
                         ui.close_menu();
                     }
+                    if ui.button("Product Management").clicked() {
+                        app.current_screen = Screen::ProductManagement;
+                        ui.close_menu();
+                    }
                     if ui.button("Quit").clicked() {
                         ctx.send_viewport_cmd(egui::ViewportCommand::Close);
                     }
                 });
                 ui.menu_button("Help", |ui| {
                     match app.current_screen {
-                        Screen::Admin => todo!(),
-                        Screen::Login => todo!(),
-                        Screen::Purchase => todo!(),
+                        Screen::Admin => ui.label("no contextual help yet"),
+                        Screen::Login => ui.label("no contextual help yet"),
+                        Screen::Purchase => ui.label("no contextual help yet"),
                         Screen::Sales => ui.label("To remove a line, double click the 'remove line' button of the line you want to remove"),
-                        Screen::Transfer => todo!(),
-                        Screen::TableCreator => todo!(),
+                        Screen::Transfer => ui.label("no contextual help yet"),
+                        Screen::TableCreator => ui.label("no contextual help yet"),
                         Screen::QuerySender => ui.label("Queries typed here will be sent via the EZDB query_table() function"),
+                        Screen::ProductManagement => ui.label("Create entries in the 'Products' table"),
+
                     }
                 });
                 ui.add_space(16.0);
@@ -96,17 +102,22 @@ pub fn default_central_panel(app: &mut App, ctx: &egui::Context) {
     });
 }
 
-pub fn list_of_lines(ui: &mut Ui, lines_ref: &mut Vec<Vec<String>>, default_line: Vec<String>) {
+pub fn list_of_lines(ui: &mut Ui, ctx: &egui::Context, lines_ref: &mut Vec<Vec<String>>, default_line: Vec<String>, header: Vec<String>) {
     ui.vertical(|ui| {
         ui.horizontal(|ui| {
             if ui.button("add line").clicked() {
                 lines_ref.push(default_line);
             }
         });
-
+        
         let mut remover: Option<usize> = None;
-        for (index, line) in &mut lines_ref.iter_mut().enumerate() {
-            ui.horizontal(|ui| {
+        egui::Grid::new("some_unique_id").min_col_width(75.0).striped(true).show(ui, |ui| {
+            for item in header {
+                ui.label(&item);
+            }
+
+            ui.end_row();
+            for (index, line) in &mut lines_ref.iter_mut().enumerate() {
                 ui.label(index.to_string());
                 if ui.button("remove line").double_clicked() {
                     remover = Some(index);
@@ -114,11 +125,24 @@ pub fn list_of_lines(ui: &mut Ui, lines_ref: &mut Vec<Vec<String>>, default_line
                 for i in 0..line.len() {
                     ui.add(egui::TextEdit::singleline(&mut line[i]).desired_width(75.0));
                 }
-            });
-        }
+                ui.end_row();
+            }
+        });
 
         if let Some(index) = remover {
             lines_ref.remove(index);
         }
     });
+}
+
+// Function to get the width of a string
+fn get_string_width(ctx: &egui::Context, text: &str) -> f32 {
+    // Get the FontDefinitions from the context
+    let mut width = 0.0;
+    for char in text.chars() {
+        width += ctx.fonts(|n| n.glyph_width(&FontId::default(), char));
+
+    }
+
+    width
 }

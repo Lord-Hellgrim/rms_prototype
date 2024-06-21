@@ -1,10 +1,13 @@
 
 use std::fmt::Display;
 
+use inventory_management_screen::show_product_management_screen;
+use inventory_management_screen::ProductManagementScreen;
 use sales_screen::SalesScreen;
 
 use crate::components;
 
+use crate::screens;
 use crate::screens::*;
 use self::admin_screen::show_admin_screen;
 use self::admin_screen::AdminScreen;
@@ -25,6 +28,7 @@ pub enum Screen {
     Transfer,
     TableCreator,
     QuerySender,
+    ProductManagement,
 }
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -66,6 +70,7 @@ pub struct App {
     pub sales_screen: SalesScreen,
     pub table_creator_screen: TableCreatorScreen,
     pub query_sender_screen: QuerySenderScreen,
+    pub product_management_screen: ProductManagementScreen,
 }
 
 impl Default for App {
@@ -80,6 +85,7 @@ impl Default for App {
             sales_screen: SalesScreen::default(),
             table_creator_screen: TableCreatorScreen::default(),
             query_sender_screen: QuerySenderScreen::default(),
+            product_management_screen: ProductManagementScreen::default(),
         }
     }
 }
@@ -114,7 +120,6 @@ impl eframe::App for App {
         // Put your widgets into a `SidePanel`, `TopBottomPanel`, `CentralPanel`, `Window` or `Area`.
         // For inspiration and more examples, go to https://emilk.github.io/egui
 
-
         match self.current_screen {
             Screen::Admin => show_admin_screen(self, ctx),
             Screen::Login => show_login_screen(self, ctx),
@@ -123,6 +128,7 @@ impl eframe::App for App {
             Screen::Sales => show_sales_screen(self, ctx),
             Screen::TableCreator => show_table_creator_screen(self, ctx),
             Screen::QuerySender => show_query_creator_screen(self, ctx),
+            Screen::ProductManagement => show_product_management_screen(self, ctx),
         };
 
     }

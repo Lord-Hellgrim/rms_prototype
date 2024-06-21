@@ -10,7 +10,7 @@ pub struct SalesScreen {
 impl Default for SalesScreen {
     fn default() -> Self {
         SalesScreen {
-            lines: vec![vec!["first".to_owned(), "default".to_owned(), "line".to_owned(),]]
+            lines: vec![vec!["id".to_owned(), "name".to_owned(), "price".to_owned(), "location".to_owned(), "stock".to_owned()]]
         }
     }
 }
@@ -23,7 +23,13 @@ pub fn show_sales_screen(app: &mut App, ctx: &egui::Context) {
 
         ui.heading("SALES SCREEN");
 
-        list_of_lines(ui, &mut app.sales_screen.lines, vec!["default".to_owned(), "line".to_owned(), "entry".to_owned(),]);
+        list_of_lines(
+            ui,
+            ctx,
+            &mut app.sales_screen.lines, 
+            vec!["id".to_owned(), "name".to_owned(), "price".to_owned(), "location".to_owned(), "stock".to_owned()], 
+            vec![" ".to_owned(), " ".to_owned(), "id".to_owned(), "name".to_owned(), "price".to_owned(), "location".to_owned(), "stock".to_owned()],
+        );
     });
 
 }

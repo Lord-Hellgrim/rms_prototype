@@ -4,11 +4,20 @@ use EZDB::db_structure::KeyString;
 use crate::{components, utilities::lines_to_ezcsv, App};
 
 
-#[derive(Default)]
 pub struct QuerySenderScreen {
     query_string: String,
     query_result: String,
     promise: Option<Promise<String>>,
+}
+
+impl Default for QuerySenderScreen {
+    fn default() -> Self {
+        Self { 
+            query_string: "SELECT(table_name: test, primary_keys: *, conditions: ())".to_owned(),
+            query_result: "".to_owned(),
+            promise: None,
+        }
+    }
 }
 
 
