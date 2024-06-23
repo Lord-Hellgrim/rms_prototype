@@ -26,8 +26,8 @@ pub fn show_product_management_screen(app: &mut App, ctx: &egui::Context) {
                 ctx_clone.request_repaint(); // wake up UI thread
                 match good_csv {
                     Ok(csv) => match csv {
-                        Some(x) => x.to_string(),
-                        None => "OK".to_owned(),
+                        EZDB::client_networking::Response::Message(message) => message,
+                        EZDB::client_networking::Response::Table(table) => table.to_string(),
                     },
                     Err(e) => format!("Could not retreive data because: {e}"),
                 }

@@ -5,7 +5,7 @@ version = 3
 [[package]]
 name = "EZDB"
 version = "0.1.15"
-source = "git+https://github.com/lord-hellgrim/EZDB.git?branch=master#015678fbe133d66fe03cd988c3e807c0816f4d07"
+source = "git+https://github.com/lord-hellgrim/EZDB.git?branch=master#fc127ad8555fb028c6acc83f952b17beb803d13b"
 dependencies = [
  "aes-gcm",
  "bit-vec",
