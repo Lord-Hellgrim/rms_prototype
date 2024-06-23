@@ -63,7 +63,7 @@ pub fn show_table_creator_screen(app: &mut App, ctx: &egui::Context) {
                     std::thread::sleep(std::time::Duration::from_secs(3));
                     ctx_clone.request_repaint(); // wake up UI thread
                     match answer {
-                        Ok(csv) => csv,
+                        Ok(_) => "OK".to_owned(),
                         Err(e) => format!("Could not retreive data because: {e}"),
                     }
                 });

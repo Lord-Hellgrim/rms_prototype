@@ -85,6 +85,22 @@ pub fn lines_to_ezcsv(lines: &Vec<Vec<String>>) -> String {
 
 }
 
+pub fn lines_to_insert_format(lines: &Vec<Vec<String>>) -> String {
+    let mut printer = String::new();
+
+    for line in lines {
+        printer.push('(');
+
+        printer.push_str(&EZDB::networking_utilities::print_sep_list(line, ","));
+
+        printer.push(')');
+        printer.push(',');
+    }
+    printer.pop();
+
+    printer
+}
+
 #[derive(Clone, Copy, Hash, PartialEq)]
 pub struct String64 {
     inner: [u8;64],
@@ -276,6 +292,22 @@ impl String64 {
 
     pub fn to_f32_checked(&self) -> Result<f32, std::num::ParseFloatError> {
         self.as_str().parse::<f32>()
+    }
+
+}
+
+#[cfg(test)]
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn test_insert_format() {
+        let line = vec!["id".to_owned(), "name".to_owned(), "price".to_owned(), "picture".to_owned()];
+        let line2 = vec!["id2".to_owned(), "name2".to_owned(), "price2".to_owned(), "picture2".to_owned()];
+
+        let insert_format = lines_to_insert_format(&vec![line, line2]);
+        println!("{}", insert_format);
     }
 
 }

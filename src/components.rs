@@ -1,8 +1,5 @@
-use std::ops::Range;
+use egui::Ui;
 
-use egui::{text_selection::text_cursor_state::byte_index_from_char_index, FontId, Key, RichText, TextBuffer, TextStyle, Ui};
-
-use EZDB::db_structure::KeyString;
 
 use crate::app::*;
 
@@ -135,14 +132,3 @@ pub fn list_of_lines(ui: &mut Ui, ctx: &egui::Context, lines_ref: &mut Vec<Vec<S
     });
 }
 
-// Function to get the width of a string
-fn get_string_width(ctx: &egui::Context, text: &str) -> f32 {
-    // Get the FontDefinitions from the context
-    let mut width = 0.0;
-    for char in text.chars() {
-        width += ctx.fonts(|n| n.glyph_width(&FontId::default(), char));
-
-    }
-
-    width
-}

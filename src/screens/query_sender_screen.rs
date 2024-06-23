@@ -39,8 +39,9 @@ pub fn show_query_creator_screen(app: &mut App, ctx: &egui::Context) {
                 let answer = EZDB::client_networking::query_table("127.0.0.1:3004", "admin", "admin", &query_string);
                 ctx_clone.request_repaint(); // wake up UI thread
                 match answer {
-                    Ok(csv) => {
-                        csv
+                    Ok(csv) => match csv {
+                        Some(x) => x.to_string(),
+                        None => "OK".to_owned(),
                     },
                     Err(e) => format!("Could not retreive data because: {e}"),
                 }

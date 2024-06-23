@@ -1,8 +1,8 @@
 
 use std::fmt::Display;
 
-use inventory_management_screen::show_product_management_screen;
-use inventory_management_screen::ProductManagementScreen;
+use product_management_screen::show_product_management_screen;
+use product_management_screen::ProductManagementScreen;
 use sales_screen::SalesScreen;
 
 use crate::components;
@@ -104,6 +104,9 @@ impl App {
         // if let Some(storage) = cc.storage {
         //     return eframe::get_value(storage, eframe::APP_KEY).unwrap_or_default();
         // }
+
+        let products_string = std::fs::read_to_string("Products.csv").unwrap();
+        EZDB::client_networking::upload_table("127.0.0.1:3004", "admin", "admin", "Products", &products_string).unwrap();
 
         Default::default()
     }

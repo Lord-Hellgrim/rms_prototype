@@ -22,7 +22,7 @@ pub fn show_admin_screen(app: &mut App, ctx: &egui::Context) {
                 let good_csv = EZDB::client_networking::download_table("127.0.0.1:3004", "admin", "admin", "good_csv");
                 ctx_clone.request_repaint(); // wake up UI thread
                 match good_csv {
-                    Ok(csv) => csv,
+                    Ok(csv) => csv.to_string(),
                     Err(e) => format!("Could not retreive data because: {e}"),
                 }
             });
@@ -60,7 +60,7 @@ pub fn show_admin_screen(app: &mut App, ctx: &egui::Context) {
                     );
                     ctx_clone.request_repaint();
                     match confirmation {
-                        Ok(ok) => format!("Upload successful: {}", ok),
+                        Ok(_) => format!("Upload successful!"),
                         Err(e) => format!("Upload failed because: {}", e),
                     }
                 });
@@ -84,7 +84,7 @@ pub fn show_admin_screen(app: &mut App, ctx: &egui::Context) {
                     );
                     ctx_clone.request_repaint();
                     match confirmation {
-                        Ok(ok) => format!("Upload successful: {}", ok),
+                        Ok(_) => format!("Upload successful!"),
                         Err(e) => format!("Upload failed because: {}", e),
                     }
                 });
