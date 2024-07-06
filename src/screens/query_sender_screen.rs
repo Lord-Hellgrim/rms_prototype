@@ -1,5 +1,6 @@
 use poll_promise::Promise;
 use EZDB::db_structure::KeyString;
+use EZDB::client_networking::Response as EzResponse;
 
 use crate::{components, utilities::lines_to_ezcsv, App};
 
@@ -40,8 +41,8 @@ pub fn show_query_creator_screen(app: &mut App, ctx: &egui::Context) {
                 ctx_clone.request_repaint(); // wake up UI thread
                 match answer {
                     Ok(csv) => match csv {
-                        Some(x) => x.to_string(),
-                        None => "OK".to_owned(),
+                        EzResponse::Table(table) => table.to_string(),
+                        EzResponse::Message(message) => message,
                     },
                     Err(e) => format!("Could not retreive data because: {e}"),
                 }
@@ -60,7 +61,6 @@ pub fn show_query_creator_screen(app: &mut App, ctx: &egui::Context) {
         }
 
         ui.text_edit_multiline(&mut app.query_sender_screen.query_result);
-        
         
     });
 }
