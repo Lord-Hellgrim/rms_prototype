@@ -131,4 +131,3 @@ pub fn list_of_lines(ui: &mut Ui, ctx: &egui::Context, lines_ref: &mut Vec<Vec<S
         }
     });
 }
-

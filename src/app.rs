@@ -105,8 +105,8 @@ impl App {
         //     return eframe::get_value(storage, eframe::APP_KEY).unwrap_or_default();
         // }
 
-        let products_string = std::fs::read_to_string("Products.csv").unwrap();
-        EZDB::client_networking::upload_table("127.0.0.1:3004", "admin", "admin", "Products", &products_string).unwrap();
+        // let products_string = std::fs::read_to_string("Products.csv").unwrap();
+        // EZDB::client_networking::upload_table("127.0.0.1:3004", "admin", "admin", "Products", &products_string).unwrap();
 
         Default::default()
     }
