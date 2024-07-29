@@ -3,6 +3,7 @@
 pub mod app;
 pub mod components;
 pub mod utilities;
+pub mod rms_error;
 pub mod screens;
 pub use app::App;
 pub mod database_layer;

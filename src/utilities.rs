@@ -1,12 +1,31 @@
-
-
 use std::str::Utf8Error;
 
 use egui::{text_selection::text_cursor_state::byte_index_from_char_index, TextBuffer};
-use EZDB::networking_utilities::bytes_to_str;
 
-use crate::app;
+use crate::{app, rms_error::RmsError};
 
+pub fn csv_to_insert(csv: &str) -> Result<String, RmsError> {
+    let mut output = String::new();
+
+    if csv.is_empty() {
+        return Err(RmsError::Format)
+    }
+
+    let mut csviter = csv.lines();
+    let header = csviter.next().expect("Should always be valid since we know csv is not empty");
+    output.push_str(&format!("({}) VALUES ", header));
+
+    for line in csviter {
+        if line.split(',').count() != header.split(',').count() {
+            return Err(RmsError::Format)
+        }
+        output.push_str(&format!("({}),", line));
+    }
+    output.pop();
+
+    Ok(output)
+
+}
 
 pub fn lines_to_csv(lines: &[app::Product], skiplist: &[u8]) -> String {
     
@@ -66,39 +85,38 @@ pub fn lines_to_csv(lines: &[app::Product], skiplist: &[u8]) -> String {
     printer
 }
 
-
-pub fn lines_to_ezcsv(lines: &Vec<Vec<String>>) -> String {
-
-    let mut ezcsv = String::new();
-
-    for line in lines {
-        for cell in line {
-            ezcsv.push_str(cell);
-            ezcsv.push_str(";");
+/// Removes the trailing 0 bytes from a str created from a byte buffer
+pub fn bytes_to_str(bytes: &[u8]) -> Result<&str, Utf8Error> {
+    let mut index: usize = 0;
+    let len = bytes.len();
+    let mut start: usize = 0;
+    
+    while index < len {
+        if bytes[index] != 0 {
+            break
         }
-        ezcsv.pop();
-        ezcsv.push('\n');
+        index += 1;
+        start += 1;
     }
-    ezcsv.pop();
 
-    ezcsv
-
-}
-
-pub fn lines_to_insert_format(lines: &Vec<Vec<String>>) -> String {
-    let mut printer = String::new();
-
-    for line in lines {
-        printer.push('(');
-
-        printer.push_str(&EZDB::networking_utilities::print_sep_list(line, ","));
-
-        printer.push(')');
-        printer.push(',');
+    if bytes.is_empty() {
+        return Ok("")
     }
-    printer.pop();
 
-    printer
+    if start >= bytes.len()-1 {
+        return Ok("")
+    }
+
+    let mut stop: usize = start;
+    while index < len {
+        if bytes[index] == 0 {
+            break
+        }
+        index += 1;
+        stop += 1;
+    }
+
+    std::str::from_utf8(&bytes[start..stop])
 }
 
 #[derive(Clone, Copy, Hash, PartialEq)]
@@ -301,13 +319,12 @@ mod tests {
 
     use super::*;
 
-    #[test]
-    fn test_insert_format() {
-        let line = vec!["id".to_owned(), "name".to_owned(), "price".to_owned(), "picture".to_owned()];
-        let line2 = vec!["id2".to_owned(), "name2".to_owned(), "price2".to_owned(), "picture2".to_owned()];
+   #[test]
+    pub fn test_csv_to_insert() {
+        let csv = "one, two, three, four, five\n1,2,3,4,5\n6,7,8,9,10";
+        let parsed = csv_to_insert(csv).unwrap();
 
-        let insert_format = lines_to_insert_format(&vec![line, line2]);
-        println!("{}", insert_format);
+        println!("{:?}", parsed)
     }
 
 }

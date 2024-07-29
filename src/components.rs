@@ -37,14 +37,6 @@ pub fn default_top_bar(ctx: &egui::Context, app: &mut App) {
                         ui.close_menu();
                         
                     }
-                    if ui.button("Table Creator").clicked() {
-                        app.current_screen = Screen::TableCreator;
-                        ui.close_menu();
-                    }
-                    if ui.button("Query sender").clicked() {
-                        app.current_screen = Screen::QuerySender;
-                        ui.close_menu();
-                    }
                     if ui.button("Product Management").clicked() {
                         app.current_screen = Screen::ProductManagement;
                         ui.close_menu();
@@ -60,8 +52,6 @@ pub fn default_top_bar(ctx: &egui::Context, app: &mut App) {
                         Screen::Purchase => ui.label("no contextual help yet"),
                         Screen::Sales => ui.label("To remove a line, double click the 'remove line' button of the line you want to remove"),
                         Screen::Transfer => ui.label("no contextual help yet"),
-                        Screen::TableCreator => ui.label("no contextual help yet"),
-                        Screen::QuerySender => ui.label("Queries typed here will be sent via the EZDB query_table() function"),
                         Screen::ProductManagement => ui.label("Create entries in the 'Products' table"),
 
                     }

@@ -17,17 +17,17 @@ pub fn show_admin_screen(app: &mut App, ctx: &egui::Context) {
     
     egui::CentralPanel::default().show(ctx, |ui| {
         let ctx_clone = ctx.clone();
-        if ui.button("Test poll_promise").clicked() {
-            let promise = Promise::spawn_thread("test", move || {
-                let good_csv = EZDB::client_networking::download_table("127.0.0.1:3004", "admin", "admin", "good_csv");
-                ctx_clone.request_repaint(); // wake up UI thread
-                match good_csv {
-                    Ok(csv) => csv.to_string(),
-                    Err(e) => format!("Could not retreive data because: {e}"),
-                }
-            });
-            app.admin_screen.promise = Some(promise);
-        }
+        // if ui.button("Test poll_promise").clicked() {
+        //     let promise = Promise::spawn_thread("test", move || {
+        //         let good_csv = EZDB::client_networking::download_table("127.0.0.1:3004", "admin", "admin", "good_csv");
+        //         ctx_clone.request_repaint(); // wake up UI thread
+        //         match good_csv {
+        //             Ok(csv) => csv.to_string(),
+        //             Err(e) => format!("Could not retreive data because: {e}"),
+        //         }
+        //     });
+        //     app.admin_screen.promise = Some(promise);
+        // }
 
         if let Some(promise) = &app.admin_screen.promise {
             if let Some(text) = promise.ready() {
@@ -50,21 +50,21 @@ pub fn show_admin_screen(app: &mut App, ctx: &egui::Context) {
                 let table_title = app.admin_screen.table_title.clone();
                 println!("{}\n\n{}", app.admin_screen.table_text, app.admin_screen.table_text.len());
                 let table_text = app.admin_screen.table_text.clone();
-                let promise = Promise::spawn_thread("upload table", move || {
-                    let confirmation = EZDB::client_networking::upload_table(
-                        "127.0.0.1:3004",
-                        "admin",
-                        "admin",
-                        &table_title,
-                        &table_text
-                    );
-                    ctx_clone.request_repaint();
-                    match confirmation {
-                        Ok(_) => format!("Upload successful!"),
-                        Err(e) => format!("Upload failed because: {}", e),
-                    }
-                });
-                app.admin_screen.promise = Some(promise);
+                // let promise = Promise::spawn_thread("upload table", move || {
+                //     let confirmation = EZDB::client_networking::upload_table(
+                //         "127.0.0.1:3004",
+                //         "admin",
+                //         "admin",
+                //         &table_title,
+                //         &table_text
+                //     );
+                //     ctx_clone.request_repaint();
+                //     match confirmation {
+                //         Ok(_) => format!("Upload successful!"),
+                //         Err(e) => format!("Upload failed because: {}", e),
+                //     }
+                // });
+                // app.admin_screen.promise = Some(promise);
 
                 
                 }
@@ -74,21 +74,21 @@ pub fn show_admin_screen(app: &mut App, ctx: &egui::Context) {
                 let table_title = app.admin_screen.table_title.clone();
                 println!("{}\n\n{}", app.admin_screen.table_text, app.admin_screen.table_text.len());
                 let table_text = app.admin_screen.table_text.clone();
-                let promise = Promise::spawn_thread("upload table", move || {
-                    let confirmation = EZDB::client_networking::update_table(
-                        "127.0.0.1:3004",
-                        "admin",
-                        "admin",
-                        &table_title,
-                        &table_text
-                    );
-                    ctx_clone.request_repaint();
-                    match confirmation {
-                        Ok(_) => format!("Upload successful!"),
-                        Err(e) => format!("Upload failed because: {}", e),
-                    }
-                });
-                app.admin_screen.promise = Some(promise);
+                // let promise = Promise::spawn_thread("upload table", move || {
+                //     let confirmation = EZDB::client_networking::update_table(
+                //         "127.0.0.1:3004",
+                //         "admin",
+                //         "admin",
+                //         &table_title,
+                //         &table_text
+                //     );
+                //     ctx_clone.request_repaint();
+                //     match confirmation {
+                //         Ok(_) => format!("Upload successful!"),
+                //         Err(e) => format!("Upload failed because: {}", e),
+                //     }
+                // });
+                // app.admin_screen.promise = Some(promise);
 
                 
                 }
@@ -96,11 +96,11 @@ pub fn show_admin_screen(app: &mut App, ctx: &egui::Context) {
 
             });
 
-            if let Some(promise) = &app.admin_screen.promise {
-                if let Some(text) = promise.ready() {
-                    app.admin_screen.table_confirmation = text.clone();
-                }
-            }
+            // if let Some(promise) = &app.admin_screen.promise {
+            //     if let Some(text) = promise.ready() {
+            //         app.admin_screen.table_confirmation = text.clone();
+            //     }
+            // }
             ui.label("Table name");
             ui.text_edit_singleline(&mut app.admin_screen.table_title);
             ui.label("EZCSV formatted string");

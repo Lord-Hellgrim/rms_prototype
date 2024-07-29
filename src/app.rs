@@ -1,4 +1,3 @@
-
 use std::fmt::Display;
 
 use product_management_screen::show_product_management_screen;
@@ -13,11 +12,7 @@ use self::admin_screen::show_admin_screen;
 use self::admin_screen::AdminScreen;
 use self::login_screen::show_login_screen;
 use self::login_screen::LoginScreen;
-use self::query_sender_screen::show_query_creator_screen;
-use self::query_sender_screen::QuerySenderScreen;
 use self::sales_screen::show_sales_screen;
-use self::table_creator_screen::show_table_creator_screen;
-use self::table_creator_screen::TableCreatorScreen;
 
 #[derive(Debug)]
 pub enum Screen {
@@ -26,8 +21,6 @@ pub enum Screen {
     Purchase,
     Sales,
     Transfer,
-    TableCreator,
-    QuerySender,
     ProductManagement,
 }
 
@@ -68,8 +61,6 @@ pub struct App {
     pub login_screen: LoginScreen,
     pub admin_screen: AdminScreen,
     pub sales_screen: SalesScreen,
-    pub table_creator_screen: TableCreatorScreen,
-    pub query_sender_screen: QuerySenderScreen,
     pub product_management_screen: ProductManagementScreen,
 }
 
@@ -83,8 +74,6 @@ impl Default for App {
             login_screen: LoginScreen::default(),
             admin_screen: AdminScreen::default(),
             sales_screen: SalesScreen::default(),
-            table_creator_screen: TableCreatorScreen::default(),
-            query_sender_screen: QuerySenderScreen::default(),
             product_management_screen: ProductManagementScreen::default(),
         }
     }
@@ -129,8 +118,6 @@ impl eframe::App for App {
             Screen::Purchase => show_default_screen(self, ctx),
             Screen::Transfer => show_default_screen(self, ctx),
             Screen::Sales => show_sales_screen(self, ctx),
-            Screen::TableCreator => show_table_creator_screen(self, ctx),
-            Screen::QuerySender => show_query_creator_screen(self, ctx),
             Screen::ProductManagement => show_product_management_screen(self, ctx),
         };
 

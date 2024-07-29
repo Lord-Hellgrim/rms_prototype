@@ -1,57 +1,57 @@
-use duckdb::{params, Connection, Result};
-use duckdb::arrow::record_batch::RecordBatch;
-use duckdb::arrow::util::pretty::print_batches;
+use mysql::*;
+use mysql::prelude::*;
 
-#[derive(Debug)]
-struct Person {
-    id: i32,
-    name: String,
-    data: Option<Vec<u8>>,
-}
+
+
+
+
+
 
 #[cfg(test)]
-mod tests{
-
+mod tests {
+    
+    use crate::utilities::csv_to_insert;
+    
     use super::*;
+    
+    
+    #[derive(Debug, PartialEq)]
+    struct Product {
+        id: i32,
+        price: f32,
+        name: String,
+        description: String,
+        picture: String,
+    }
 
     #[test]
-    fn test_duckdb() -> Result<()> {
-        let conn = Connection::open_in_memory()?;
+    fn test_mysql() -> std::result::Result<(), Box<dyn std::error::Error>> {
+    let url = "mysql://eztester:test@localhost:3306/ezdbtest";
+    let pool = Pool::new(url)?;
 
-        conn.execute_batch(
-            r"CREATE SEQUENCE seq;
-            CREATE TABLE person (
-                    id              INTEGER PRIMARY KEY DEFAULT NEXTVAL('seq'),
-                    name            TEXT NOT NULL,
-                    data            BLOB
-                    );
-            ")?;
-        let me = Person {
-            id: 0,
-            name: "Steven".to_string(),
-            data: None,
-        };
-        conn.execute(
-            "INSERT INTO person (name, data) VALUES (?, ?)",
-            params![me.name, me.data],
+    let mut conn = pool.get_conn()?;
+
+    let csv = csv_to_insert("id, price, name, description, picture\n18575517, 2000, 'Fúgusement' ,'Schomburg cristallfuge 6kg poki', 'cristallfuge.jpg'\n18572013, 4000, 'Flotsteypa' ,'Schomburg Soloplan 25kg poki', 'soloplan.jpg'").unwrap();
+
+    match conn.query_drop(format!("INSERT INTO products {}", csv)) {
+        Ok(_) => (),
+        Err(e) => println!("Could not perform query because:\n#################################\n{}\n#################################", e)
+    };
+
+    // Let's select payments from database. Type inference should do the trick here.
+    let selected_payments = conn
+        .query_map(
+            "SELECT * from products",
+            |(id, price, name, description, picture)| {
+                Product { id, price, name, description, picture }
+            },
         )?;
 
-        let mut stmt = conn.prepare("SELECT id, name, data FROM person")?;
-        let person_iter = stmt.query_map([], |row| {
-            Ok(Person {
-                id: row.get(0)?,
-                name: row.get(1)?,
-                data: row.get(2)?,
-            })
-        })?;
+    // Let's make sure, that `payments` equals to `selected_payments`.
+    // Mysql gives no guaranties on order of returned rows
+    // without `ORDER BY`, so assume we are lucky.
+    println!("{:?}", selected_payments);
 
-        for person in person_iter {
-            println!("Found person {:?}", person.unwrap());
-        }
-
-        // query table by arrow
-        let rbs: Vec<RecordBatch> = stmt.query_arrow([])?.collect();
-        print_batches(&rbs);
-        Ok(())
-    }
+    Ok(())
+}
 }
