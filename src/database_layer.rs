@@ -47,10 +47,20 @@ mod tests {
             },
         )?;
 
+    let select_statement = conn.prep("SELECT * FROM products WHERE id = :param").unwrap();
+
+    let result = conn.exec_map(select_statement, params!{ "param" => 18575517 }, 
+        |(id, price, name, description, picture)| {
+            Product { id, price, name, description, picture }
+        },
+    ).unwrap();
+
     // Let's make sure, that `payments` equals to `selected_payments`.
     // Mysql gives no guaranties on order of returned rows
     // without `ORDER BY`, so assume we are lucky.
     println!("{:?}", selected_payments);
+    println!();
+    println!("{:?}", result);
 
     Ok(())
 }

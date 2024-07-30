@@ -62,6 +62,7 @@ pub struct App {
     pub admin_screen: AdminScreen,
     pub sales_screen: SalesScreen,
     pub product_management_screen: ProductManagementScreen,
+    pub database_connection: mysql::Pool,
 }
 
 impl Default for App {
@@ -75,6 +76,7 @@ impl Default for App {
             admin_screen: AdminScreen::default(),
             sales_screen: SalesScreen::default(),
             product_management_screen: ProductManagementScreen::default(),
+            database_connection: mysql::Pool::new("mysql://eztester:test@localhost:3306/ezdbtest").unwrap(),
         }
     }
 }

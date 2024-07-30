@@ -24,7 +24,27 @@ pub fn csv_to_insert(csv: &str) -> Result<String, RmsError> {
     output.pop();
 
     Ok(output)
+}
 
+pub fn lines_to_insert(lines: &Vec<Vec<&str>>) -> Result<String, RmsError> {
+    let mut output = String::new();
+
+    if lines.is_empty() {
+        return Err(RmsError::Format)
+    }
+
+    let header = &lines[0];
+    output.push_str(&format!("({}) VALUES ", header.join(",")));
+
+    for line in lines {
+        if line.len() != header.len() {
+            return Err(RmsError::Format)
+        }
+        output.push_str(&format!("({}),", line.join(",")));
+    }
+    output.pop();
+
+    Ok(output)
 }
 
 pub fn lines_to_csv(lines: &[app::Product], skiplist: &[u8]) -> String {
@@ -323,6 +343,14 @@ mod tests {
     pub fn test_csv_to_insert() {
         let csv = "one, two, three, four, five\n1,2,3,4,5\n6,7,8,9,10";
         let parsed = csv_to_insert(csv).unwrap();
+
+        println!("{:?}", parsed)
+    }
+
+    #[test]
+    pub fn test_lines_to_insert() {
+        let csv = vec![vec!["one", "two", "three", "four", "five"], vec!["1","2","3","4","5"], vec!["6","7","8","9","10"]];
+        let parsed = lines_to_insert(&csv).unwrap();
 
         println!("{:?}", parsed)
     }

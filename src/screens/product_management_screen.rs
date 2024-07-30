@@ -18,7 +18,7 @@ pub fn show_product_management_screen(app: &mut App, ctx: &egui::Context) {
         ui.label("This is the product management panel. Here you can enter items into the product table.");
         let ctx_clone = ctx.clone();
         if ui.button("Insert products").clicked() {
-            // let query = format!("INSERT(table_name: Products, value_columns: (id, name, description, price, picture), new_values: {})", lines_to_insert_format(&app.product_management_screen.lines));
+            // let query = format!("INSERT INTO products {})", lines_to_csv(&app.product_management_screen.lines));
             // println!("query: {}", query);
             // let promise = Promise::spawn_thread("Insert products", move || {
             //     let good_csv = EZDB::client_networking::query_table("127.0.0.1:3004", "admin", "admin", &query);
