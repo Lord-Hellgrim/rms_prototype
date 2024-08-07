@@ -6,11 +6,29 @@ use crate::rms_error::RmsError;
 
 pub fn initialize_database(connection: &mut mysql::PooledConn) -> Result<(), RmsError> {
 
-    let create_products_statement = connection.prep("CREATE TABLE products (id INT PRIMARY KEY, price FLOAT, name VARCHAR(64), description VARCHAR(255), picture VARCHAR(255)")?;
-    let create_warehouses_statement = connection.prep("CREATE TABLE warehouses (id VARCHAR(255) PRIMARY KEY)")?;
-    let create_pictures_statement = connection.prep("CREATE TABLE pictures (id VARCHAR(255), data LONGBLOB)")?;
-    let create_transactions_statement = connection.prep("CREATE TABLE transactions (id INT, price FLOAT, name VARCHAR(64), description VARCHAR(255), picture VARCHAR(255)")?;
-
+    
+    connection.query_drop("DROP TABLE IF EXISTS transfer_items")?;
+    connection.query_drop("DROP TABLE IF EXISTS transfers")?;
+    connection.query_drop("DROP TABLE IF EXISTS transaction_items")?;
+    connection.query_drop("DROP TABLE IF EXISTS transactions")?;
+    connection.query_drop("DROP TABLE IF EXISTS pictures")?;
+    connection.query_drop("DROP TABLE IF EXISTS warehouses")?;
+    connection.query_drop("DROP TABLE IF EXISTS products")?;
+    
+    connection.query_drop("CREATE TABLE products (id INT PRIMARY KEY, price FLOAT, name VARCHAR(64), description VARCHAR(255), picture VARCHAR(255))")?;
+    println!("8");
+    connection.query_drop("CREATE TABLE warehouses (id VARCHAR(255) PRIMARY KEY)")?;
+    println!("9");
+    connection.query_drop("CREATE TABLE pictures (id VARCHAR(255) PRIMARY KEY, data LONGBLOB)")?;
+    println!("10");
+    connection.query_drop("CREATE TABLE transactions (id INT PRIMARY KEY, date DATETIME, salesman VARCHAR(255), client VARCHAR(255), warehouse VARCHAR(255), amount FLOAT, FOREIGN KEY (warehouse) REFERENCES warehouses (id))")?;
+    println!("11");
+    connection.query_drop("CREATE TABLE transaction_items (line_id INT PRIMARY KEY AUTO_INCREMENT, transaction_id INT, product_id INT, amount FLOAT, FOREIGN KEY (product_id) REFERENCES products(id))")?;
+    println!("12");
+    connection.query_drop("CREATE TABLE transfers (id INT PRIMARY KEY, date DATETIME, employee VARCHAR(255), transfer_from VARCHAR(255), transfer_to VARCHAR(255), FOREIGN KEY (transfer_from) REFERENCES warehouses (id), FOREIGN KEY (transfer_to) REFERENCES warehouses (id))")?;
+    println!("13");
+    connection.query_drop("CREATE TABLE transfer_items (line_id INT PRIMARY KEY AUTO_INCREMENT, transaction_id INT, product_id INT, amount FLOAT, FOREIGN KEY (product_id) REFERENCES products(id))")?;
+println!("14");
 
     Ok(())
 }

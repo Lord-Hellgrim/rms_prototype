@@ -6,6 +6,7 @@ use sales_screen::SalesScreen;
 
 use crate::components;
 
+use crate::database_layer;
 use crate::screens;
 use crate::screens::*;
 use self::admin_screen::show_admin_screen;
@@ -98,8 +99,13 @@ impl App {
 
         // let products_string = std::fs::read_to_string("Products.csv").unwrap();
         // EZDB::client_networking::upload_table("127.0.0.1:3004", "admin", "admin", "Products", &products_string).unwrap();
+        let output: App = Default::default();
 
-        Default::default()
+        let mut connection = output.database_connection.get_conn().unwrap();
+        
+        database_layer::initialize_database(&mut connection).unwrap();
+
+        output
     }
 }
 
