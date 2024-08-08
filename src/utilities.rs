@@ -26,25 +26,23 @@ pub fn csv_to_insert(csv: &str) -> Result<String, RmsError> {
     Ok(output)
 }
 
-pub fn lines_to_insert(lines: &Vec<Vec<&str>>) -> Result<String, RmsError> {
-    let mut output = String::new();
+pub fn lines_to_product_insert(lines: &Vec<Vec<String>>) -> String {
+    let mut output = String::from("(");
 
-    if lines.is_empty() {
-        return Err(RmsError::Format)
-    }
-
-    let header = &lines[0];
-    output.push_str(&format!("({}) VALUES ", header.join(",")));
-
+    // id INT PRIMARY KEY, name VARCHAR(64), description VARCHAR(255), price FLOAT, picture VARCHAR(255)
     for line in lines {
-        if line.len() != header.len() {
-            return Err(RmsError::Format)
-        }
-        output.push_str(&format!("({}),", line.join(",")));
+        output.push_str(&format!("{},'{}','{}',{},'{}'", 
+            line[0],
+            line[1],
+            line[2],
+            line[3],
+            line[4],
+        ));
     }
-    output.pop();
+    output.push(')');
 
-    Ok(output)
+    output
+    
 }
 
 pub fn lines_to_csv(lines: &[app::Product], skiplist: &[u8]) -> String {

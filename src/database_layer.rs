@@ -40,16 +40,6 @@ mod tests {
     use crate::utilities::csv_to_insert;
     
     use super::*;
-    
-    
-    #[derive(Debug, PartialEq)]
-    struct Product {
-        id: i32,
-        price: f32,
-        name: String,
-        description: String,
-        picture: String,
-    }
 
     #[test]
     fn test_mysql() -> std::result::Result<(), Box<dyn std::error::Error>> {

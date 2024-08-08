@@ -1,12 +1,24 @@
+use mysql::prelude::Queryable;
 use poll_promise::Promise;
 
-use crate::{components::{default_central_panel, default_top_bar, list_of_lines}, App};
+use crate::{components::{default_central_panel, default_top_bar, list_of_lines}, utilities::lines_to_product_insert, App};
 
 
 #[derive(Default)]
 pub struct ProductManagementScreen {
-    lines: Vec<Vec<String>>,
-    promise: Option<Promise<String>>,
+    inserts: Vec<Vec<String>>,
+    promise: Option<Promise<Vec<Product>>>,
+    products_text: String,
+}
+
+
+#[derive(Debug, PartialEq)]
+struct Product {
+    id: i32,
+    price: f32,
+    name: String,
+    description: String,
+    picture: String,
 }
 
 
@@ -18,27 +30,37 @@ pub fn show_product_management_screen(app: &mut App, ctx: &egui::Context) {
         ui.label("This is the product management panel. Here you can enter items into the product table.");
         let ctx_clone = ctx.clone();
         if ui.button("Insert products").clicked() {
-            // let query = format!("INSERT INTO products {})", lines_to_csv(&app.product_management_screen.lines));
-            // println!("query: {}", query);
-            // let promise = Promise::spawn_thread("Insert products", move || {
-            //     let good_csv = EZDB::client_networking::query_table("127.0.0.1:3004", "admin", "admin", &query);
-            //     ctx_clone.request_repaint(); // wake up UI thread
-            //     match good_csv {
-            //         Ok(csv) => match csv {
-            //             EZDB::client_networking::Response::Message(message) => message,
-            //             EZDB::client_networking::Response::Table(table) => table.to_string(),
-            //         },
-            //         Err(e) => format!("Could not retreive data because: {e}"),
-            //     }
-            // });
-            // app.product_management_screen.promise = Some(promise);
+            let mut conn = app.database_connection.get_conn().unwrap();
+            let query = format!("INSERT INTO products (id, name, description, price, picture) VALUES {}", lines_to_product_insert(&app.product_management_screen.inserts));
+            println!("{}", query);
+            conn.query_drop(query).unwrap();
+            ctx_clone.request_repaint(); // wake up UI thread
         }
         list_of_lines(
             ui,
             ctx,
-            &mut app.product_management_screen.lines, 
+            &mut app.product_management_screen.inserts, 
             vec!["id".to_owned(), "name".to_owned(), "description".to_owned(), "price".to_owned(), "picture".to_owned()],
             vec!["".to_owned(), "".to_owned(), "id".to_owned(), "name".to_owned(), "description".to_owned(), "price".to_owned(), "picture".to_owned()],
         );
+
+        if ui.button("Show all products").clicked() {
+            let mut conn = app.database_connection.get_conn().unwrap();
+            let promise = poll_promise::Promise::spawn_thread("SELECT * FROM products", move || {
+                conn.query_map(
+                    "SELECT * from products",
+                    |(id, price, name, description, picture)| {
+                        Product { id, price, name, description, picture }
+                    },
+                ).unwrap()
+            });
+            app.product_management_screen.promise = Some(promise);
+        }
+        ui.text_edit_multiline(&mut app.product_management_screen.products_text);
+        if let Some(promise) = &app.product_management_screen.promise {
+            if let Some(products) = promise.ready() {
+                app.product_management_screen.products_text = format!("{:?}", products);
+            }
+        }
     });
 }
