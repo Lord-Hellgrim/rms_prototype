@@ -22,26 +22,6 @@ fn main() -> eframe::Result<()> {
     eframe::run_native(
         "rms_prototype",
         native_options,
-        Box::new(|cc| Box::new(rms_prototype::App::new(cc))),
+        Box::new(|cc| Ok(Box::new(rms_prototype::App::new(cc)))),
     )
-}
-
-// When compiling to web using trunk:
-#[cfg(target_arch = "wasm32")]
-fn main() {
-    // Redirect `log` message to `console.log` and friends:
-    eframe::WebLogger::init(log::LevelFilter::Debug).ok();
-
-    let web_options = eframe::WebOptions::default();
-
-    wasm_bindgen_futures::spawn_local(async {
-        eframe::WebRunner::new()
-            .start(
-                "the_canvas_id", // hardcode it
-                web_options,
-                Box::new(|cc| Box::new(rms_prototype::App::new(cc))),
-            )
-            .await
-            .expect("failed to start eframe");
-    });
 }

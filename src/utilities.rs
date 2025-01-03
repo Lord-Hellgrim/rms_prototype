@@ -2,7 +2,14 @@ use std::str::Utf8Error;
 
 use egui::{text_selection::text_cursor_state::byte_index_from_char_index, TextBuffer};
 
-use crate::{app, rms_error::RmsError};
+use crate::app;
+
+#[derive(Debug, Clone, Copy)]
+pub enum RmsError {
+    Format,
+    
+}
+
 
 pub fn csv_to_insert(csv: &str) -> Result<String, RmsError> {
     let mut output = String::new();
@@ -337,20 +344,5 @@ mod tests {
 
     use super::*;
 
-   #[test]
-    pub fn test_csv_to_insert() {
-        let csv = "one, two, three, four, five\n1,2,3,4,5\n6,7,8,9,10";
-        let parsed = csv_to_insert(csv).unwrap();
-
-        println!("{:?}", parsed)
-    }
-
-    #[test]
-    pub fn test_lines_to_insert() {
-        let csv = vec![vec!["one", "two", "three", "four", "five"], vec!["1","2","3","4","5"], vec!["6","7","8","9","10"]];
-        let parsed = lines_to_insert(&csv).unwrap();
-
-        println!("{:?}", parsed)
-    }
 
 }

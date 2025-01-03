@@ -37,10 +37,6 @@ pub fn default_top_bar(ctx: &egui::Context, app: &mut App) {
                         ui.close_menu();
                         
                     }
-                    if ui.button("Product Management").clicked() {
-                        app.current_screen = Screen::ProductManagement;
-                        ui.close_menu();
-                    }
                     if ui.button("Quit").clicked() {
                         ctx.send_viewport_cmd(egui::ViewportCommand::Close);
                     }
@@ -52,7 +48,6 @@ pub fn default_top_bar(ctx: &egui::Context, app: &mut App) {
                         Screen::Purchase => ui.label("no contextual help yet"),
                         Screen::Sales => ui.label("To remove a line, double click the 'remove line' button of the line you want to remove"),
                         Screen::Transfer => ui.label("no contextual help yet"),
-                        Screen::ProductManagement => ui.label("Create entries in the 'Products' table"),
 
                     }
                 });

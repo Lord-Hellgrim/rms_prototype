@@ -1,12 +1,9 @@
 use std::fmt::Display;
 
-use product_management_screen::show_product_management_screen;
-use product_management_screen::ProductManagementScreen;
 use sales_screen::SalesScreen;
 
 use crate::components;
 
-use crate::database_layer;
 use crate::screens;
 use crate::screens::*;
 use self::admin_screen::show_admin_screen;
@@ -22,7 +19,6 @@ pub enum Screen {
     Purchase,
     Sales,
     Transfer,
-    ProductManagement,
 }
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -62,8 +58,6 @@ pub struct App {
     pub login_screen: LoginScreen,
     pub admin_screen: AdminScreen,
     pub sales_screen: SalesScreen,
-    pub product_management_screen: ProductManagementScreen,
-    pub database_connection: mysql::Pool,
 }
 
 impl Default for App {
@@ -76,8 +70,6 @@ impl Default for App {
             login_screen: LoginScreen::default(),
             admin_screen: AdminScreen::default(),
             sales_screen: SalesScreen::default(),
-            product_management_screen: ProductManagementScreen::default(),
-            database_connection: mysql::Pool::new("mysql://eztester:test@localhost:3306/ezdbtest").unwrap(),
         }
     }
 }
@@ -101,10 +93,6 @@ impl App {
         // EZDB::client_networking::upload_table("127.0.0.1:3004", "admin", "admin", "Products", &products_string).unwrap();
         let output: App = Default::default();
 
-        let mut connection = output.database_connection.get_conn().unwrap();
-        
-        database_layer::initialize_database(&mut connection).unwrap();
-
         output
     }
 }
@@ -126,7 +114,6 @@ impl eframe::App for App {
             Screen::Purchase => show_default_screen(self, ctx),
             Screen::Transfer => show_default_screen(self, ctx),
             Screen::Sales => show_sales_screen(self, ctx),
-            Screen::ProductManagement => show_product_management_screen(self, ctx),
         };
 
     }

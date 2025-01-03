@@ -7,14 +7,9 @@ rust-version = "1.72"
 
 
 [dependencies]
-egui = "0.27.2"
-eframe = { version = "0.27.2", default-features = false, features = [
-    # "accesskit",     # Make egui comptaible with screen readers. NOTE: adds a lot of dependencies.
-    "default_fonts", # Embed the default egui fonts.
-    "glow",          # Use the glow rendering backend. Alternative: "wgpu".
-    #"wgpu",
-    # "persistence",   # Enable restoring app state when restarting the app.
-] }
+egui = { git = "https://github.com/emilk/egui", branch = "master" }
+eframe = { git = "https://github.com/emilk/egui", branch = "master" }
+
 log = "0.4"
 [target.'cfg(not(target_env = "msvc"))'.dependencies]
 tikv-jemallocator = "0.6"
@@ -23,9 +18,7 @@ tikv-jemallocator = "0.6"
 # serde = { version = "1", features = ["derive"] }
 # smartstring = "1.0.1"
 poll-promise = "0.3.0"
-mysql = "25.0.1"
-# EZDB = { git = "https://github.com/lord-hellgrim/EZDB.git", branch = "master" }
-# duckdb = { version = "1.0.0", features = ["bundled"] }
+EZDB = { git = "https://github.com/lord-hellgrim/EZDB.git", branch = "master" }
 
 # native:
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
@@ -35,20 +28,9 @@ env_logger = "0.10"
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 wasm-bindgen-futures = "0.4"
 
-
-[profile.release]
-opt-level = 2 # fast and small wasm
-
-# Optimize all dependencies even in debug builds:
-[profile.dev.package."*"]
-opt-level = 2
-
-
 [patch.crates-io]
 
 # If you want to use the bleeding edge version of egui and eframe:
-# egui = { git = "https://github.com/emilk/egui", branch = "master" }
-# eframe = { git = "https://github.com/emilk/egui", branch = "master" }
 
 # If you fork https://github.com/emilk/egui you can test with:
 # egui = { path = "../egui/crates/egui" }
