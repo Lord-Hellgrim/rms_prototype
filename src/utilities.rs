@@ -1,4 +1,4 @@
-use std::str::Utf8Error;
+use std::{any::TypeId, str::Utf8Error};
 
 use egui::{text_selection::text_cursor_state::byte_index_from_char_index, TextBuffer};
 
@@ -266,6 +266,11 @@ impl TextBuffer for String64 {
     fn replace_with(&mut self, text: &str) {
         *self = String64::from(text);
     }
+    
+    fn type_id(&self) -> std::any::TypeId {
+        TypeId::of::<Self>()
+    }
+    
 }
 
 impl String64 {

@@ -87,8 +87,15 @@ pub fn default_central_panel(app: &mut App, ctx: &egui::Context) {
 pub fn list_of_lines(ui: &mut Ui, ctx: &egui::Context, lines_ref: &mut Vec<Vec<String>>, default_line: Vec<String>, header: Vec<String>) {
     ui.vertical(|ui| {
         ui.horizontal(|ui| {
-            if ui.button("add line").clicked() {
+            let res = ui.button("add line");
+            let mut window = egui::containers::Window::new("context menu");
+            if res.clicked() {
                 lines_ref.push(default_line);
+            } else if res.secondary_clicked() {
+                println!("Right clicked!");
+                window.current_pos(res.ctx.pointer_latest_pos().unwrap()).show(ctx, |ui| {
+                    ui.label("Testing!");
+                });
             }
         });
         
