@@ -24,6 +24,15 @@ impl Default for LoginScreen {
 }
 
 pub fn show_login_screen(app: &mut App, ctx: &egui::Context) {
+
+    ctx.set_style(egui::Style{
+        visuals: egui::Visuals {
+            // extreme_bg_color: egui::Color32::from_rgb(0,255,0),
+            ..Default::default()
+        },
+        ..Default::default()
+    });
+
     // components::default_top_bar(ctx, app);
 
     egui::CentralPanel::default().show(ctx, |ui| {

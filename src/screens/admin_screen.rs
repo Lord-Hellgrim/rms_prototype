@@ -12,6 +12,15 @@ pub struct AdminScreen {
 }
 
 pub fn show_admin_screen(app: &mut App, ctx: &egui::Context) {
+
+    ctx.set_style(egui::Style{
+        visuals: egui::Visuals {
+            // extreme_bg_color: egui::Color32::from_rgb(255,0,0),
+            ..Default::default()
+        },
+        ..Default::default()
+    });
+
     components::default_top_bar(ctx, app);
 
     
@@ -43,58 +52,58 @@ pub fn show_admin_screen(app: &mut App, ctx: &egui::Context) {
                 ui.label(&app.admin_screen.table_confirmation);
             });
 
-            ui.horizontal(|ui| {
+            // ui.horizontal(|ui| {
 
-                if ui.button("upload table").clicked() {
-                    let ctx_clone = ctx.clone();
-                let table_title = app.admin_screen.table_title.clone();
-                println!("{}\n\n{}", app.admin_screen.table_text, app.admin_screen.table_text.len());
-                let table_text = app.admin_screen.table_text.clone();
-                // let promise = Promise::spawn_thread("upload table", move || {
-                //     let confirmation = EZDB::client_networking::upload_table(
-                //         "127.0.0.1:3004",
-                //         "admin",
-                //         "admin",
-                //         &table_title,
-                //         &table_text
-                //     );
-                //     ctx_clone.request_repaint();
-                //     match confirmation {
-                //         Ok(_) => format!("Upload successful!"),
-                //         Err(e) => format!("Upload failed because: {}", e),
-                //     }
-                // });
-                // app.admin_screen.promise = Some(promise);
-
-                
-                }
-
-                if ui.button("update table").clicked() {
-                    let ctx_clone = ctx.clone();
-                let table_title = app.admin_screen.table_title.clone();
-                println!("{}\n\n{}", app.admin_screen.table_text, app.admin_screen.table_text.len());
-                let table_text = app.admin_screen.table_text.clone();
-                // let promise = Promise::spawn_thread("upload table", move || {
-                //     let confirmation = EZDB::client_networking::update_table(
-                //         "127.0.0.1:3004",
-                //         "admin",
-                //         "admin",
-                //         &table_title,
-                //         &table_text
-                //     );
-                //     ctx_clone.request_repaint();
-                //     match confirmation {
-                //         Ok(_) => format!("Upload successful!"),
-                //         Err(e) => format!("Upload failed because: {}", e),
-                //     }
-                // });
-                // app.admin_screen.promise = Some(promise);
+            //     if ui.button("upload table").clicked() {
+            //         let ctx_clone = ctx.clone();
+            //     let table_title = app.admin_screen.table_title.clone();
+            //     println!("{}\n\n{}", app.admin_screen.table_text, app.admin_screen.table_text.len());
+            //     let table_text = app.admin_screen.table_text.clone();
+            //     let promise = Promise::spawn_thread("upload table", move || {
+            //         let confirmation = EZDB::client_networking::upload_table(
+            //             "127.0.0.1:3004",
+            //             "admin",
+            //             "admin",
+            //             &table_title,
+            //             &table_text
+            //         );
+            //         ctx_clone.request_repaint();
+            //         match confirmation {
+            //             Ok(_) => format!("Upload successful!"),
+            //             Err(e) => format!("Upload failed because: {}", e),
+            //         }
+            //     });
+            //     app.admin_screen.promise = Some(promise);
 
                 
-                }
+            //     }
+
+            //     if ui.button("update table").clicked() {
+            //         let ctx_clone = ctx.clone();
+            //     let table_title = app.admin_screen.table_title.clone();
+            //     println!("{}\n\n{}", app.admin_screen.table_text, app.admin_screen.table_text.len());
+            //     let table_text = app.admin_screen.table_text.clone();
+            //     let promise = Promise::spawn_thread("upload table", move || {
+            //         let confirmation = EZDB::client_networking::update_table(
+            //             "127.0.0.1:3004",
+            //             "admin",
+            //             "admin",
+            //             &table_title,
+            //             &table_text
+            //         );
+            //         ctx_clone.request_repaint();
+            //         match confirmation {
+            //             Ok(_) => format!("Upload successful!"),
+            //             Err(e) => format!("Upload failed because: {}", e),
+            //         }
+            //     });
+            //     app.admin_screen.promise = Some(promise);
+
+                
+            //     }
 
 
-            });
+            // });
 
             // if let Some(promise) = &app.admin_screen.promise {
             //     if let Some(text) = promise.ready() {

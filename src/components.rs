@@ -8,33 +8,33 @@ pub fn default_top_bar(ctx: &egui::Context, app: &mut App) {
     egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
         // The top panel is often a good place for a menu bar:
         
-        egui::menu::bar(ui, |ui| {
+        egui::containers::menu::Bar::new().ui(ui, |ui| {
             // NOTE: no File->Quit on web pages!
             let is_web = cfg!(target_arch = "wasm32");
             if !is_web {
                 ui.menu_button("File", |ui| {
                     if ui.button("Admin").clicked() {
                         app.current_screen = Screen::Admin;
-                        ui.close_menu();
+                        ui.close();
                     }
                     #[cfg(debug_assertions)]
                     if ui.button("Login").clicked() {
                         app.current_screen = Screen::Login;
-                        ui.close_menu();
+                        ui.close();
                     }
                     if ui.button("Purchase").clicked() {
                         app.current_screen = Screen::Purchase;
-                        ui.close_menu();
+                        ui.close();
                         
                     }
                     if ui.button("Sales").clicked() {
                         app.current_screen = Screen::Sales;
-                        ui.close_menu();
+                        ui.close();
                         
                     }
                     if ui.button("Transfer").clicked() {
                         app.current_screen = Screen::Transfer;
-                        ui.close_menu();
+                        ui.close();
                         
                     }
                     if ui.button("Quit").clicked() {
@@ -54,7 +54,6 @@ pub fn default_top_bar(ctx: &egui::Context, app: &mut App) {
                 ui.add_space(16.0);
             }
 
-            egui::widgets::global_dark_light_mode_buttons(ui);
         });
     });
 

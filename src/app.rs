@@ -108,6 +108,8 @@ impl eframe::App for App {
         // Put your widgets into a `SidePanel`, `TopBottomPanel`, `CentralPanel`, `Window` or `Area`.
         // For inspiration and more examples, go to https://emilk.github.io/egui
 
+        
+
         match self.current_screen {
             Screen::Admin => show_admin_screen(self, ctx),
             Screen::Login => show_login_screen(self, ctx),
